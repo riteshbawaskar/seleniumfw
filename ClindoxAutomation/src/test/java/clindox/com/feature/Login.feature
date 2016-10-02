@@ -8,6 +8,7 @@ Feature: Login
     Examples:
         |username|password|result|
         | test   |test    |There has been an error. Your username or password is incorrect. Please try again... |
-        | test   |        |There has been an error. Your username or password is incorrect. Please try again... |
-        |        |  test | There has been an error. Your username or password is incorrect. Please try again... |
-        |default |default | successful                                                                       |
+        | test   |        |Enter Password                                                                    |
+        |        |  test  |Enter Username                                                                       |
+        |default |default | successful                                                                          |
+

@@ -1,14 +1,20 @@
 package clindox.com.pages;
 
+import clindox.com.utils.BasePage;
+import clindox.com.utils.ReportProvider;
+import cucumber.api.Scenario;
+import cucumber.api.java.After;
+import cucumber.api.java.Before;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-/**
- * Created by RUPALI on 01/10/2016.
- */
-public class LoginPage {
+import java.util.List;
+import java.util.NoSuchElementException;
+
+public class LoginPage extends BasePage {
 
     @FindBy(id="username")
     public WebElement username;
@@ -22,10 +28,19 @@ public class LoginPage {
     @FindBy(id="ErrorMsg")
     public WebElement validationresult;
 
+    @FindBy(xpath="//div[@id='ValidationSummary1']/ul/li")
+    public List<WebElement> validationSummary;
+
     @FindBy(xpath="//h1[contains(text(), 'Dashboard')]")
     public WebElement Dashboard;
 
     public WebDriver driver;
+
+    public LoginPage() {
+    }
+
+
+
     public void setDriver(WebDriver driver){
         this.driver = driver;
     }
@@ -49,11 +64,23 @@ public class LoginPage {
             return(Dashboard.isDisplayed());
         else
         {
-            String data = validationresult.getText();
-            if (data.contains(result))
-                return true;
-            else
-                return false;
+
+            if(validationSummary.size() <= 0) {
+                String data = validationresult.getText();
+                if (data.contains(result))
+                    return true;
+                else
+                    return false;
+            }
+            else {
+                String data = validationSummary.get(0).getText();
+                if (data.contains(result))
+                    return true;
+                else
+                    return false;
+            }
         }
     }
+
+
 }

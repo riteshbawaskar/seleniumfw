@@ -4,9 +4,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Properties;
 
-/**
- * Created by Ritesh on 01/10/2016.
- */
+
 public class ConfigProvider {
     public static Properties Config;
 

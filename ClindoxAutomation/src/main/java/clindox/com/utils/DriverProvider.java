@@ -11,6 +11,7 @@ public class DriverProvider {
 
     private static Map<String, WebDriver> drivers = new HashMap<String, WebDriver>();
     public static ConfigProvider configProvider = new ConfigProvider();
+
     public static WebDriver getBrowser() {
 
         WebDriver driver = null;

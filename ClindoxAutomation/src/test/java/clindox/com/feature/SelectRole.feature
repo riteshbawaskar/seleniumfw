@@ -7,5 +7,8 @@ Feature: SelectRole
     When changes role as "<Role>"
     Then role should be changed successfully as "<Role>"
     Examples:
-      |Role|
-      | Admin   |
+      |Role          |
+      | Admin        |
+      | Monitor      |
+      | Sponsor      |
+      | Investigator |
