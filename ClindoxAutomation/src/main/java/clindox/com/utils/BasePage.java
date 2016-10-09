@@ -27,7 +27,7 @@ public class BasePage {
 
     public void WaitforElement(By locator)
     {
-        WebDriverWait wait = new WebDriverWait(driver, 5);
+        WebDriverWait wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.elementToBeClickable(locator));
     }
     public boolean isElementExist(WebElement we) {

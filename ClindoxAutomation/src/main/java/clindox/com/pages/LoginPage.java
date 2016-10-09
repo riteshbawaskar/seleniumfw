@@ -35,6 +35,8 @@ public class LoginPage extends BasePage {
     public WebElement Dashboard;
 
     public WebDriver driver;
+    @FindBy(xpath="//div[@class='signin-container clearfix']/div[@class='content']")
+    public WebElement loginContainer;
 
     public LoginPage() {
     }

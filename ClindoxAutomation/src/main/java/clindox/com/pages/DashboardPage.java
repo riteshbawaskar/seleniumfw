@@ -19,7 +19,10 @@ public class DashboardPage extends BasePage{
     WebElement SelectRole_Gobtn;
 
     @FindBy(xpath="//span[@id='ctl00_lblUserRole']")
-    WebElement CurrentUserRole;
+    public WebElement CurrentUserRole;
+
+    @FindBy(xpath="//a[@id='ctl00_ContentPlaceHolder1_lnkInputData']")
+    WebElement MonitorInputData;
 
     public void SwitchProfile(String Profile )
     {
@@ -30,9 +33,16 @@ public class DashboardPage extends BasePage{
             SelectRole.sendKeys(Profile);
             SelectRole_Gobtn.click();
 
+
     }
 
     public boolean IsCurrentRole(String arg1) {
         return CurrentUserRole.getText().equals(arg1);
+    }
+
+    public void NavigateToMonitorInputData()
+    {
+        MonitorInputData.click();
+
     }
 }

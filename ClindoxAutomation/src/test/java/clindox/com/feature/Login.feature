@@ -1,5 +1,5 @@
 Feature: Login
-
+  @login
   Scenario Outline: LoginTest
     Given user launch the application
     And enter "<username>" and "<password>"

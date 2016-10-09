@@ -12,7 +12,8 @@ import cucumber.api.CucumberOptions;
 @RunWith(Cucumber.class)
 @CucumberOptions(
         plugin = {"pretty", "html:target/Destination"},
-        features = "src/test/java/clindox/com/feature"
+        features = "src/test/java/clindox/com/feature" //,
+      // tags = {"@login"}
 )
 public class Runner {
 

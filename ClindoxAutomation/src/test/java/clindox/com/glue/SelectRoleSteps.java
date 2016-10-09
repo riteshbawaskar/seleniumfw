@@ -55,6 +55,13 @@ public class SelectRoleSteps {
         dashboardPage = PageFactory.initElements(driver, DashboardPage.class);
     }
 
+    @Given("^set user role as \"([^\"]*)\"$")
+    public void set_user_role_as(String role) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        dashboardPage.SwitchProfile(role);
+        ReportProvider.getTest().log(LogStatus.INFO,"switch profile to " + role);
+    }
+
     @When("^changes role as \"([^\"]*)\"$")
     public void changes_role_as(String arg1) throws Throwable {
         // Write code here that turns the phrase above into concrete actions
@@ -68,6 +75,7 @@ public class SelectRoleSteps {
         // Write code here that turns the phrase above into concrete actions
        // throw new PendingException();
         Assert.assertTrue(dashboardPage.IsCurrentRole(arg1));
+        ReportProvider.GenerateSnapshotReport(driver, dashboardPage.CurrentUserRole);
         ReportProvider.getTest().log(LogStatus.PASS,"switch profile successfully to " + arg1);
     }
 
