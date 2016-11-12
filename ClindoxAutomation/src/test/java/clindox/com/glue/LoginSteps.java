@@ -39,6 +39,7 @@ public class LoginSteps {
     @After
     public void EndScenario()
     {
+        DriverProvider.closeAllDriver();
         ReportProvider.EndTest();
         ReportProvider.getReporter().flush();
     }
@@ -85,12 +86,6 @@ public class LoginSteps {
       //  throw new PendingException();
         Assert.assertTrue(loginPage.ValidateLogin(arg1));
 
-
-      //  File screenshot = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-       // FileUtils.copyFile(screenshot, new File("c:\\dev\\"+screenshot.getName()));
-        //ReportProvider.getTest().addScreenCapture("c:\\dev\\"+screenshot.getName());
-       // ReportProvider.getTest().addBase64ScreenShot(screenshot);
-       // ReportProvider.getTest().log(LogStatus.PASS,"<Img src=' c:\\dev\\"+screenshot.getName()+ "'/>" );
         ReportProvider.GenerateSnapshotReport(driver, loginPage.loginContainer);
         ReportProvider.getTest().log(LogStatus.PASS,"Login Passed." );
     }
