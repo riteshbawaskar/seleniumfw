@@ -16,6 +16,7 @@ import cucumber.api.java.en.When;
 import gherkin.formatter.model.DataTableRow;
 import org.junit.Assert;
 import org.omg.CORBA.portable.Streamable;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 
@@ -91,7 +92,7 @@ public class UpdateAnswersSteps {
         for(DataTableRow question : rows){
            List<String> cells = question.getCells();
             visitPage.SetWebDriver(driver);
-            visitPage.AnswerTheQuestion(cells.get(0),cells.get(1),cells.get(2));
+            visitPage.AnswerTheQuestion(cells.get(0),cells.get(1),cells.get(2),"");
             ReportProvider.getTest().log(LogStatus.INFO,cells.get(0) + " = " + cells.get(1));
             ReportProvider.GenerateSnapshotReport(driver, visitPage.currentQuestion);
        }
@@ -126,7 +127,7 @@ public class UpdateAnswersSteps {
             int startInputRow = 1;
 
 
-            ReportProvider.getTest().log(LogStatus.INFO, " Select Visit : " +Sheet);
+            ReportProvider.getTest().log(LogStatus.INFO, " Select Sheet : " +Sheet);
 
             List<String> inputData = reader.getData(Sheet,startInputRow);
 
@@ -159,11 +160,22 @@ public class UpdateAnswersSteps {
                         ReportProvider.getTest().log(LogStatus.FAIL, " Subject not found : " +Subject);
                         continue;
                     }
-                    ReportProvider.getTest().log(LogStatus.INFO, " Select Subject : " + Subject);
+                    ReportProvider.getTest().log(LogStatus.INFO, "Subject : " + Subject);
                     Thread.sleep(2000);
                     visitPage.SelectVisit(Visit);
+                    ReportProvider.getTest().log(LogStatus.INFO, "Visit : " + Visit);
+                    Thread.sleep(2000);
                     String Section = headers.get(6);
-                    visitPage.SelectSection(Section);
+
+                    try {
+                        visitPage.SelectSection(Section);
+
+                    }catch (Exception ex)
+                    {
+
+                    }
+
+
                     Thread.sleep(2000);
                     for (int i = 7; i < Data.size(); i++) {
 
@@ -177,8 +189,9 @@ public class UpdateAnswersSteps {
                                     if (InputData != "") {
 
                                         String quest = Question.substring(0, Question.lastIndexOf("_"));
-                                        visitPage.AnswerTheQuestion(quest, InputData, "");
-                                        ReportProvider.getTest().log(LogStatus.INFO, "Enter Data for : " + quest );
+                                        String strID  = Question.substring(Question.lastIndexOf("_")+1);
+                                        ReportProvider.getTest().log(LogStatus.INFO, "Enter Data : " + quest + " = " +InputData );
+                                        visitPage.AnswerTheQuestion(quest, InputData, "",strID);
                                         //ReportProvider.GenerateSnapshotReport(driver, visitPage.currentQuestion);
                                     }
                                 }
@@ -189,7 +202,8 @@ public class UpdateAnswersSteps {
                                 else if(tableContent)
                                 {
                                     if (InputData != "") {
-                                        visitPage.AnswerTheQuestion(Question, InputData, "Grid");
+                                        visitPage.AnswerTheQuestion(Question, InputData, "Grid", "");
+                                        ReportProvider.getTest().log(LogStatus.INFO, "Enter Data : " + Question + " = " + InputData);
                                     }
                                     else if(visitPage.IsSection(Question))
                                     {
@@ -198,16 +212,26 @@ public class UpdateAnswersSteps {
                                 }
                                 else {
                                     visitPage.saveChanges();
-                                    visitPage.SelectSection(Question);
-                                    ReportProvider.getTest().log(LogStatus.INFO, "Section : " + Question );
+                                    Thread.sleep(1000);
+                                    try {
+                                        visitPage.SelectSection(Question);
+                                        ReportProvider.getTest().log(LogStatus.INFO, "Section : " + Question);
+                                    }catch (Exception ex)
+                                    {
+                                        ReportProvider.getTest().log(LogStatus.ERROR, "Section : " + Question + ". Not Found.");
+                                    }
                                     Thread.sleep(1000);
                                 }
 
                         }catch (Exception ex)
                         {
-                            ReportProvider.getTest().log(LogStatus.FAIL, " Error entering data in column : " +headers.get(i));
+                            if(ex.getClass().equals(NoSuchElementException.class))
+                                ReportProvider.getTest().log(LogStatus.FAIL, " Error: Field not found : " +headers.get(i));
+                            else
+                                ReportProvider.getTest().log(LogStatus.FAIL, " Error entering data in column : " +headers.get(i));
                         }
                     }
+                    visitPage.saveChanges();
                 }catch (Exception ex)
                 {
                     ReportProvider.getTest().log(LogStatus.ERROR, " Error entering data in row : " + nRow +"." );

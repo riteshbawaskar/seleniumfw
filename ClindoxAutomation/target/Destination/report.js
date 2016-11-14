@@ -13,7 +13,7 @@ formatter.feature({
   ]
 });
 formatter.before({
-  "duration": 1175449709,
+  "duration": 859689929,
   "status": "passed"
 });
 formatter.background({
@@ -32,7 +32,7 @@ formatter.match({
   "location": "SelectRoleSteps.login_to_application_with_default_user()"
 });
 formatter.result({
-  "duration": 21525353548,
+  "duration": 13231448740,
   "status": "passed"
 });
 formatter.scenario({
@@ -73,7 +73,7 @@ formatter.match({
   "location": "SelectRoleSteps.user_is_on_Dashboard_Page()"
 });
 formatter.result({
-  "duration": 2887033,
+  "duration": 3750647,
   "status": "passed"
 });
 formatter.match({
@@ -86,25 +86,25 @@ formatter.match({
   "location": "SelectRoleSteps.set_user_role_as(String)"
 });
 formatter.result({
-  "duration": 2109455071,
+  "duration": 2135514482,
   "status": "passed"
 });
 formatter.match({
   "location": "UpdateAnswersSteps.user_Enters_data_from_Input_Sheet()"
 });
 formatter.result({
-  "duration": 68684588071,
+  "duration": 251357828046,
   "status": "passed"
 });
 formatter.match({
   "location": "UpdateAnswersSteps.data_should_be_saved_successfully()"
 });
 formatter.result({
-  "duration": 26881,
+  "duration": 35679,
   "status": "passed"
 });
 formatter.after({
-  "duration": 2024830832,
+  "duration": 2149921287,
   "status": "passed"
 });
 });

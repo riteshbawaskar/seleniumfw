@@ -41,9 +41,14 @@ public class VisitPage extends BasePage{
         savechanges.click();
         Thread.sleep(1000);
 
-        String result = "//div[@id='ctl00_ContentPlaceHolder1_ErrorMsgQuestion']";
-        WebElement element =  driver.findElement(By.xpath(result));
+        String resultxpath = "//div[@id='ctl00_ContentPlaceHolder1_ErrorMsgQuestion']";
 
+        try {
+            WaitforElement(By.xpath(resultxpath));
+        }
+        catch (Exception ex){
+            return false;}
+        WebElement element =  driver.findElement(By.xpath(resultxpath));
         if(element.getText().contains("Data Saved Successfully"))
             return true;
         else
@@ -88,7 +93,8 @@ public class VisitPage extends BasePage{
         if(element.size() > 0)
         {
             saveChanges();
-            element.get(0).click();
+            WebElement sectionelement =  driver.findElement(By.xpath(sectionxpath));
+            sectionelement.click();
             return true;
         }
         else
@@ -118,18 +124,36 @@ public class VisitPage extends BasePage{
         return "Input";
     }
 
-    public boolean AnswerTheQuestion(String Question, String Answer, String ControlType) throws Exception
+    public boolean AnswerTheQuestion(String Question, String Answer, String ControlType, String strid) throws Exception
     {
         for(WebElement questionrow: QuestionList)
         {
-            if(questionrow.getText().contains(Question))
+            boolean isquestionsection = false;
+            if(strid!="") {
+                WebElement input = questionrow.findElement(By.xpath(".//input[@type='hidden']"));
+                if(input.getAttribute("value").contains(strid))
+                    isquestionsection = true;
+                else
+                    isquestionsection = false;
+            }
+            else if(ControlType.equals("Grid") )
+            {
+                if(questionrow.getText().contains("\n"+Question.trim()))
+                isquestionsection = true;
+            }
+            else if(questionrow.getText().startsWith(Question.trim()))
+            {
+                isquestionsection = true;
+            }
+
+            if(isquestionsection)
             {
                 currentQuestion = questionrow;
 
                 if(ControlType == "") ControlType = lookupControlType(questionrow);
                 if(ControlType.equals("Grid"))
                 {
-                    WebElement input = questionrow.findElement(By.xpath(".//table//tr//span[contains(text(),'" +Question+"')]/../../.. "));
+                    WebElement input = questionrow.findElement(By.xpath(".//table//tr//span[contains(text(),'" +Question+"')]/../.. "));
                     ControlType = lookupControlType(input);
                     questionrow = input;
 
