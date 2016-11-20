@@ -99,12 +99,6 @@ public class UpdateAnswersSteps {
 
     }
 
-    @Then("^data should be saved successfully$")
-    public void data_should_be_saved_successfully() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-//        throw new PendingException();
-    }
-
     @When("^User Enters data from Input Sheet$")
     public void user_Enters_data_from_Input_Sheet() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
@@ -172,12 +166,12 @@ public class UpdateAnswersSteps {
 
                     }catch (Exception ex)
                     {
-
+                        visitPage.SelectVisit(Visit,Section);
                     }
 
 
                     Thread.sleep(2000);
-                    for (int i = 7; i < Data.size(); i++) {
+                    for (int i = 7; i < headers.size(); i++) {
 
                         try {
                                 String InputData = Data.get(i);
@@ -218,10 +212,153 @@ public class UpdateAnswersSteps {
                                         ReportProvider.getTest().log(LogStatus.INFO, "Section : " + Question);
                                     }catch (Exception ex)
                                     {
-                                        ReportProvider.getTest().log(LogStatus.ERROR, "Section : " + Question + ". Not Found.");
+                                        visitPage.SelectVisit(Visit,Section);
+                                        //ReportProvider.getTest().log(LogStatus.ERROR, "Section : " + Question + ". Not Found.");
                                     }
                                     Thread.sleep(1000);
                                 }
+
+                        }catch (Exception ex)
+                        {
+                            if(ex.getClass().equals(NoSuchElementException.class))
+                                ReportProvider.getTest().log(LogStatus.FAIL, " Error: Field not found : " +headers.get(i));
+                            else
+                                ReportProvider.getTest().log(LogStatus.FAIL, " Error entering data in column : " +headers.get(i));
+                        }
+                    }
+                   boolean result = visitPage.saveChanges();
+                    if (!result) {
+                        ReportProvider.getTest().log(LogStatus.FAIL, " Error saving data." + nRow +"." );
+                        ReportProvider.GenerateSnapshotReport(driver);
+                    }
+                }catch (Exception ex)
+                {
+                    ReportProvider.getTest().log(LogStatus.ERROR, " Error entering data in row : " + nRow +"." );
+                }
+            }
+        }
+    }
+
+    @Then("^data should be saved successfully$")
+    public void data_should_be_saved_successfully() throws Throwable {
+
+    }
+
+    @Then("^data should be validated successfully$")
+    public void data_should_be_validated_successfully() throws Throwable {
+
+        // Write code here that turns the phrase above into concrete actions
+        String inputFile = configProvider.getConfiguration("inputdataSheet");
+        ExcelReader reader = new ExcelReader(inputFile);
+
+        driver = DriverProvider.getBrowser();
+        visitPage =  PageFactory.initElements(driver, VisitPage.class);
+        visitPage.SetWebDriver(driver);
+        dashboardPage = PageFactory.initElements(driver, DashboardPage.class);
+
+        dashboardPage.gotoHomePage();
+        Thread.sleep(2000);
+        dashboardPage.NavigateToMonitorInputData();
+        Thread.sleep(2000);
+
+        for(String Sheet : reader.getWorksheets())
+        {
+            List<String> headers = reader.getData(Sheet,0);
+            int startInputRow = 1;
+
+            ReportProvider.getTest().log(LogStatus.INFO, " Select Sheet : " +Sheet);
+            List<String> inputData = reader.getData(Sheet,startInputRow);
+
+            for(int nRow =startInputRow;nRow<=reader.getRowCount(Sheet);nRow++)
+            {
+                try {
+
+                    subjectListPage = PageFactory.initElements(driver, SubjectListPage.class);
+                    inputDataPage = PageFactory.initElements(driver, InputDataPage.class);
+                    dashboardPage = PageFactory.initElements(driver, DashboardPage.class);
+
+                    dashboardPage.navigateToBreadcrumbs("Input Study's List");
+                    Thread.sleep(1000);
+                    Boolean tableContent = false;
+                    String tableRow = "1";
+                    ReportProvider.getTest().log(LogStatus.INFO, " Validate data for Row  : " +nRow);
+
+                    String CRFID = inputData.get(0);
+                    inputDataPage.gotoSubjects(CRFID);
+                    ReportProvider.getTest().log(LogStatus.INFO," Select Study : " + CRFID);
+
+                    List<String> Data = reader.getData(Sheet, nRow);
+
+                    String Subject = Data.get(2);
+                    String Visit = headers.get(5);
+                    Subject = Subject.replace(".0", "");
+                    if(! subjectListPage.SelectSubject(Subject, "1"))
+                    {
+                        ReportProvider.getTest().log(LogStatus.FAIL, " Subject not found : " +Subject);
+                        continue;
+                    }
+                    ReportProvider.getTest().log(LogStatus.INFO, "Subject : " + Subject);
+                    String Section = headers.get(6);
+                    Thread.sleep(2000);
+                    visitPage.SelectVisit(Visit);
+                    ReportProvider.getTest().log(LogStatus.INFO, "Visit : " + Visit);
+                    Thread.sleep(2000);
+
+                    try {
+                        visitPage.SelectSection(Section);
+
+                    }catch (Exception ex)
+                    {
+                        visitPage.SelectVisit(Visit,Section);
+                    }
+
+
+                    Thread.sleep(2000);
+                    for (int i = 7; i < Data.size(); i++) {
+
+                        try {
+                            String InputData = Data.get(i);
+                            String ControlType = "";
+                            String Question = headers.get(i);
+
+                            if (Question.contains("_") & Question.matches(".*._\\d*\\d$")) {
+                                tableContent = false;
+                                if (InputData != "") {
+
+                                    String quest = Question.substring(0, Question.lastIndexOf("_"));
+                                    String strID  = Question.substring(Question.lastIndexOf("_")+1);
+                                    ReportProvider.getTest().log(LogStatus.INFO, "Enter Data : " + quest + " = " +InputData );
+                                    visitPage.ValidateAnswer(quest, InputData, "",strID);
+                                    //ReportProvider.GenerateSnapshotReport(driver, visitPage.currentQuestion);
+                                }
+                            }
+                            else if(Question.equals("Row No"))
+                            {
+                                tableContent = true;
+                            }
+                            else if(tableContent)
+                            {
+                                if (InputData != "") {
+                                   // visitPage.ValidateAnswer(Question, InputData, "Grid", "");
+                                   // ReportProvider.getTest().log(LogStatus.INFO, "Enter Data : " + Question + " = " + InputData);
+                                }
+                                else if(visitPage.IsSection(Question))
+                                {
+                                    tableContent = false;
+                                }
+                            }
+                            else {
+                                visitPage.saveChanges();
+                                Thread.sleep(1000);
+                                try {
+                                    visitPage.SelectSection(Question);
+                                    ReportProvider.getTest().log(LogStatus.INFO, "Section : " + Question);
+                                }catch (Exception ex)
+                                {
+                                    ReportProvider.getTest().log(LogStatus.ERROR, "Section : " + Question + ". Not Found.");
+                                }
+                                Thread.sleep(1000);
+                            }
 
                         }catch (Exception ex)
                         {

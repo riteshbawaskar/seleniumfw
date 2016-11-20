@@ -47,7 +47,8 @@ public class VisitPage extends BasePage{
             WaitforElement(By.xpath(resultxpath));
         }
         catch (Exception ex){
-            return false;}
+            return false;
+        }
         WebElement element =  driver.findElement(By.xpath(resultxpath));
         if(element.getText().contains("Data Saved Successfully"))
             return true;
@@ -71,6 +72,26 @@ public class VisitPage extends BasePage{
         element.click();
         WebElement sectionelement =  driver.findElement(By.xpath(firstsection));
         sectionelement.click();
+    }
+
+    public void SelectVisit(String visitName, String SectionName)
+    {
+        //ul[@class='nav nav-tabs nav-stacked nav-visits']//span[@title='Visit 1 Checklist: Initial Baseline Assessment']
+        //ul[@class='nav nav-tabs nav-stacked nav-visits']//span[@title='Visit 1 Checklist: Initial Baseline Assessment']/../../ul/li[1]
+        String visitxpath = "//ul[@class='nav nav-tabs nav-stacked nav-visits']//span[@title='"+ visitName +"']";
+        String firstsection = "//ul[@class='nav nav-tabs nav-stacked nav-visits']//span[@title='"+ visitName +"']/../../ul/li";
+
+        WebElement element =  driver.findElement(By.xpath(visitxpath));
+        element.click();
+        List<WebElement> sectionelements =  driver.findElements(By.xpath(firstsection));
+        for(WebElement ele : sectionelements )
+        {
+            if(ele.getText().equals(SectionName))
+            {
+                ele.click();
+                break;
+            }
+        }
     }
 
     public void SelectSection(String section)
@@ -245,6 +266,129 @@ public class VisitPage extends BasePage{
     }
 
 
+    public boolean ValidateAnswer(String Question, String Answer, String ControlType, String strid) throws Exception
+    {
+        for(WebElement questionrow: QuestionList)
+        {
+            boolean isquestionsection = false;
+            if(strid!="") {
+                WebElement input = questionrow.findElement(By.xpath(".//input[@type='hidden']"));
+                if(input.getAttribute("value").contains(strid))
+                    isquestionsection = true;
+                else
+                    isquestionsection = false;
+            }
+            else if(ControlType.equals("Grid") )
+            {
+                if(questionrow.getText().contains("\n"+Question.trim()))
+                    isquestionsection = true;
+            }
+            else if(questionrow.getText().startsWith(Question.trim()))
+            {
+                isquestionsection = true;
+            }
 
+            if(isquestionsection)
+            {
+                currentQuestion = questionrow;
+
+                if(ControlType == "") ControlType = lookupControlType(questionrow);
+                if(ControlType.equals("Grid"))
+                {
+                   // WebElement input = questionrow.findElement(By.xpath(".//table//tr//span[contains(text(),'" +Question+"')]/../.. "));
+                   // ControlType = lookupControlType(input);
+                   // questionrow = input;
+
+                }
+
+                if(ControlType.equals("Input")) {
+                    WebElement input = questionrow.findElement(By.xpath(".//input[@type='text']"));
+                    String actualresult = input.getText();
+
+                    if(actualresult.equals(Answer)) {
+                        ReportProvider.getTest().log(LogStatus.PASS, Question + " : " + Answer);
+                    }
+                    else
+                    {
+                        ReportProvider.getTest().log(LogStatus.FAIL,Question + " : " + actualresult  + ". Expected : " + Answer);
+                    }
+
+                }
+                else if(ControlType.equals("TextArea")) {
+
+                    WebElement input = questionrow.findElement(By.xpath(".//textarea"));
+                    String actualresult = input.getText();
+
+                    if(actualresult.equals(Answer)) {
+                        ReportProvider.getTest().log(LogStatus.PASS, Question + " : " + Answer);
+                    }
+                    else
+                    {
+                        ReportProvider.getTest().log(LogStatus.FAIL,Question + " : " + actualresult  + ". Expected : " + Answer);
+                    }
+
+
+                }
+                else if(ControlType.equals("Select")) {
+                    WebElement input = questionrow.findElement(By.xpath(".//select"));
+                    String actualresult = input.getText();
+
+                    if(actualresult.equals(Answer)) {
+                        ReportProvider.getTest().log(LogStatus.PASS, Question + " : " + Answer);
+                    }
+                    else
+                    {
+                        ReportProvider.getTest().log(LogStatus.FAIL,Question + " : " + actualresult  + ". Expected : " + Answer);
+                    }
+                }
+
+                else if(ControlType.equals("Option")) {
+                    WebElement input = questionrow.findElement(By.xpath(".//label[text()='" + Answer + "']/preceding-sibling::input[@type='radio']"));
+
+                    if(input.isSelected()) {
+                        ReportProvider.getTest().log(LogStatus.PASS, Question + " : " + Answer);
+                    }
+                    else
+                    {
+                        ReportProvider.getTest().log(LogStatus.FAIL,Question + " : "  + Answer +" not selected.");
+                    }
+
+                }
+                else if(ControlType.equals("Checkbox"))
+                {
+                    for(String ans: Answer.split(","))
+                    {
+                        WebElement input = questionrow.findElement(By.xpath(".//label[text()='"+ ans +"']/preceding-sibling::input[@type='checkbox']"));
+                        if(input.isSelected()) {
+                            ReportProvider.getTest().log(LogStatus.PASS, Question + " : " + Answer);
+                        }
+                        else
+                        {
+                            ReportProvider.getTest().log(LogStatus.FAIL,Question + " : "  + Answer +" not selected.");
+                        }
+                    }
+                }
+                else if(ControlType.equals("Slider"))
+                {
+                    WebElement slider = questionrow.findElement(By.xpath(".//input[@type='range']"));
+
+                        String id = slider.getAttribute("id");
+                        String name = slider.getAttribute("name");
+                        String value = slider.getAttribute("value");
+
+                        if(value.equals(Answer)) {
+                            ReportProvider.getTest().log(LogStatus.PASS, Question + " : " + Answer);
+                        }
+                        else
+                        {
+                            ReportProvider.getTest().log(LogStatus.FAIL,Question + " : " + value  + ". Expected : " + Answer);
+                        }
+                }
+
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

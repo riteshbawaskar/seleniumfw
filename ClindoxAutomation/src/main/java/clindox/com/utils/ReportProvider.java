@@ -72,4 +72,20 @@ public class ReportProvider {
             System.out.println(ex.getMessage());
         }
     }
+
+    public static void GenerateSnapshotReport(WebDriver driver)
+    {
+        try {
+            final ByteArrayOutputStream os = new ByteArrayOutputStream();
+            File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+            BufferedImage dest = ImageIO.read(screenshot);
+            ImageIO.write(dest, "png", Base64.getEncoder().wrap(os));
+            String base64 =  os.toString(StandardCharsets.ISO_8859_1.name());
+            test.log(LogStatus.INFO,"<Img src='data:image/png;base64,"+base64+ "'/>" );
+        }
+        catch (Exception ex)
+        {
+            System.out.println(ex.getMessage());
+        }
+    }
 }
