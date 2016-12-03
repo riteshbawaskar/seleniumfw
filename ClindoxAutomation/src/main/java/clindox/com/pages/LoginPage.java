@@ -49,6 +49,7 @@ public class LoginPage extends BasePage {
 
     public void EnterLoginDetails(String inputusername, String inputPassword )
     {
+        WaitforElement(By.id("btnsign"));
         System.out.println(inputusername);
         username.sendKeys(inputusername);
         password.sendKeys(inputPassword);

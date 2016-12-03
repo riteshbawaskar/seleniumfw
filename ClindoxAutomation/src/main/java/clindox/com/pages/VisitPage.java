@@ -303,7 +303,7 @@ public class VisitPage extends BasePage{
 
                 if(ControlType.equals("Input")) {
                     WebElement input = questionrow.findElement(By.xpath(".//input[@type='text']"));
-                    String actualresult = input.getText();
+                    String actualresult = input.getAttribute("value");
 
                     if(actualresult.equals(Answer)) {
                         ReportProvider.getTest().log(LogStatus.PASS, Question + " : " + Answer);
@@ -331,7 +331,7 @@ public class VisitPage extends BasePage{
                 }
                 else if(ControlType.equals("Select")) {
                     WebElement input = questionrow.findElement(By.xpath(".//select"));
-                    String actualresult = input.getText();
+                    String actualresult = input.getAttribute("value");
 
                     if(actualresult.equals(Answer)) {
                         ReportProvider.getTest().log(LogStatus.PASS, Question + " : " + Answer);
@@ -360,11 +360,11 @@ public class VisitPage extends BasePage{
                     {
                         WebElement input = questionrow.findElement(By.xpath(".//label[text()='"+ ans +"']/preceding-sibling::input[@type='checkbox']"));
                         if(input.isSelected()) {
-                            ReportProvider.getTest().log(LogStatus.PASS, Question + " : " + Answer);
+                            ReportProvider.getTest().log(LogStatus.PASS, Question + " : " + ans);
                         }
                         else
                         {
-                            ReportProvider.getTest().log(LogStatus.FAIL,Question + " : "  + Answer +" not selected.");
+                            ReportProvider.getTest().log(LogStatus.FAIL,Question + " : "  + ans +" not selected.");
                         }
                     }
                 }

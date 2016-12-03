@@ -13,7 +13,7 @@ import cucumber.api.CucumberOptions;
 @CucumberOptions(
         plugin = {"pretty", "html:target/Destination"},
         features = "src/test/java/clindox/com/feature" ,
-       tags = {"@input"}
+       tags = {"@output"}
 )
 public class RunTest {
 

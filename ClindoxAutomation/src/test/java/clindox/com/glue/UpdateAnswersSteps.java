@@ -16,8 +16,10 @@ import cucumber.api.java.en.When;
 import gherkin.formatter.model.DataTableRow;
 import org.junit.Assert;
 import org.omg.CORBA.portable.Streamable;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
@@ -167,8 +169,17 @@ public class UpdateAnswersSteps {
                     }catch (Exception ex)
                     {
                         visitPage.SelectVisit(Visit,Section);
+                        Thread.sleep(2000);
                     }
+                    try
+                    {
+                        WebElement ele = driver.findElement(By.id("ctl00_ContentPlaceHolder1_updateProgress"));
+                        while(ele.isDisplayed()) Thread.sleep(100);
+                    }
+                    catch (Exception ex)
+                    {
 
+                    }
 
                     Thread.sleep(2000);
                     for (int i = 7; i < headers.size(); i++) {
@@ -327,7 +338,7 @@ public class UpdateAnswersSteps {
 
                                     String quest = Question.substring(0, Question.lastIndexOf("_"));
                                     String strID  = Question.substring(Question.lastIndexOf("_")+1);
-                                    ReportProvider.getTest().log(LogStatus.INFO, "Enter Data : " + quest + " = " +InputData );
+                                    //ReportProvider.getTest().log(LogStatus.INFO, "Enter Data : " + quest + " = " +InputData );
                                     visitPage.ValidateAnswer(quest, InputData, "",strID);
                                     //ReportProvider.GenerateSnapshotReport(driver, visitPage.currentQuestion);
                                 }
@@ -348,8 +359,7 @@ public class UpdateAnswersSteps {
                                 }
                             }
                             else {
-                                visitPage.saveChanges();
-                                Thread.sleep(1000);
+
                                 try {
                                     visitPage.SelectSection(Question);
                                     ReportProvider.getTest().log(LogStatus.INFO, "Section : " + Question);
@@ -368,7 +378,7 @@ public class UpdateAnswersSteps {
                                 ReportProvider.getTest().log(LogStatus.FAIL, " Error entering data in column : " +headers.get(i));
                         }
                     }
-                    visitPage.saveChanges();
+
                 }catch (Exception ex)
                 {
                     ReportProvider.getTest().log(LogStatus.ERROR, " Error entering data in row : " + nRow +"." );

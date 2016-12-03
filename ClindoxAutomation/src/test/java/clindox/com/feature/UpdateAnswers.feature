@@ -29,3 +29,9 @@ Feature: Update Answers
       And set user role as "Investigator"
       When User Enters data from Input Sheet
       Then data should be saved successfully
+
+  @output
+  Scenario: Validate data from  Sheet.
+    Given user is on Dashboard Page
+    And set user role as "Investigator"
+    Then data should be validated successfully

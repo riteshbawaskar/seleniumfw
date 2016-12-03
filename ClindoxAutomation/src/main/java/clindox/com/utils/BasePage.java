@@ -17,7 +17,7 @@ public class BasePage {
     public static WebDriver driver;
     public static ConfigProvider config;
 
-    public BasePage()
+    public BasePage ()
     {
         driver = DriverProvider.getBrowser();
         config = new ConfigProvider();
@@ -27,7 +27,7 @@ public class BasePage {
 
     public void WaitforElement(By locator)
     {
-        WebDriverWait wait = new WebDriverWait(driver, 10);
+        WebDriverWait wait = new WebDriverWait(driver, 30);
         wait.until(ExpectedConditions.elementToBeClickable(locator));
     }
     public boolean isElementExist(WebElement we) {

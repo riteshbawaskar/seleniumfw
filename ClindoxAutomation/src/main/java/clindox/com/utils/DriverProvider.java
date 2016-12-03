@@ -12,7 +12,7 @@ public class DriverProvider {
     private static Map<String, WebDriver> drivers = new HashMap<String, WebDriver>();
     public static ConfigProvider configProvider = new ConfigProvider();
 
-    public static WebDriver getBrowser() {
+    public static WebDriver getBrowser()  {
 
         WebDriver driver = null;
         String browserlocation = configProvider.getConfiguration("browser.location");
@@ -27,9 +27,10 @@ public class DriverProvider {
         } else if (browserName.equals("IE")) {
             driver = drivers.get("IE");
             if (driver == null) {
-               // System.setProperty("webdriver.ie.driver", browserlocation);
+                System.setProperty("webdriver.ie.driver", browserlocation);
                 driver = new InternetExplorerDriver();
                 drivers.put("IE", driver);
+
             }
 
         } else if (browserName.equals("Chrome")) {
