@@ -39,7 +39,7 @@ public class LoginSteps {
     @After
     public void EndScenario()
     {
-        DriverProvider.closeAllDriver();
+      //  DriverProvider.closeAllDriver();
         ReportProvider.EndTest();
         ReportProvider.getReporter().flush();
     }
