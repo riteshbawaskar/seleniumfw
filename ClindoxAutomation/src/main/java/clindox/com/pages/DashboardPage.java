@@ -8,84 +8,72 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.Console;
 import java.util.List;
 
 public class DashboardPage extends BasePage{
 
-    @FindBy(xpath = "//div[@class='pull-right member-box']")
+    @FindBy(xpath = "//div[@class='navbar-fixed']//li[@class='userDetails valign-wrapper']/a")
     WebElement UserOptions;
-    @FindBy(xpath="//a[contains(text(), 'Switch Profile')]")
-    WebElement SwithProfile;
-    @FindBy(className = "ddlrole")
-    WebElement SelectRole;
-    @FindBy(xpath="//a[@id='ctl00_RoleSection2_saveQuestion']")
-    WebElement SelectRole_Gobtn;
 
-    @FindBy(xpath="//a[@id='ctl00_hrefdash']")
-    public WebElement dashboard_home;
+    @FindBy(xpath="//div[@class='navbar-fixed']//div[@class='nav-wrapper container']//li[@class='userDetails valign-wrapper']//li[@id='ctl00_Li2']//input[@class='select-dropdown']")
+    WebElement SwitchProfile;
+
+    @FindBy(xpath="//div[@class='navbar-fixed']//ul[contains(@id,'select-options-')]")
+      WebElement Profilelist;
 
     @FindBy(xpath="//span[@id='ctl00_lblUserRole']")
     public WebElement CurrentUserRole;
 
-    @FindBy(xpath="//div[@class='shortcuts']//span[text()='Create Study']")
-    WebElement CreateStudy;
+    @FindBy(xpath = "//div[@class='container overflow-container flex-container']//a[@class='button-collapse dropdown-button']/img[contains(@src,'Hamburger_Icon')]")
+    public WebElement menuoptions;
 
-    @FindBy(xpath="//div[@class='shortcuts']//span[text()='Study Design']")
-    WebElement Study_Design;
-
-    @FindBy(xpath="//div[@class='shortcuts']//span[contains(text(),'Add or manage Study')]")
-    WebElement Add_or_Manage_Study_Logs;
-
-    @FindBy(xpath="//a[@id='ctl00_ContentPlaceHolder1_lnkInputData']")
-    WebElement MonitorInputData;
-
-    @FindBy(xpath="//div[@class='shortcuts']//i[@class='shortcut-icon icon-user-md']")
-    WebElement Add_or_manage_users;
-
-    @FindBy(xpath="//div[@class='shortcuts']//span[text()='View the Query list']")
-    WebElement view_the_query_list;
-
+    @FindBy(xpath = "//div[@class='container overflow-container flex-container']/div[@class='main-container']//div[@class='col m3']//li[4]/a[@id='ctl00_lnkInputData']/span[@id='ctl00_btnInputData']")
+    public WebElement MonitorInputData;
     public void SwitchProfile(String Profile )
     {
-            UserOptions.click();
-            SwithProfile.click();
-            WaitforElement(By.className("ddlrole"));
-            SelectRole.sendKeys(Profile);
-            SelectRole_Gobtn.click();
+        try
 
+        {
+            UserOptions.click();
+            SwitchProfile.click();
+            List<WebElement> elements = Profilelist.findElements(By.xpath(".//li/span"));
+            Thread.sleep(1000);
+            if (Profile.equals("Admin"))
+                elements.get(0).click();
+            else if (Profile.equals("Investigator"))
+                elements.get(2).click();
+            else if (Profile.equals("Monitor"))
+                elements.get(3).click();
+            else if (Profile.equals("Sponsor"))
+                elements.get(4).click();
+            else if (Profile.equals("Data Manager"))
+                elements.get(1).click();
+
+        }catch (Exception ex)
+        {
+            System.out.println(ex.getMessage());
+        }
     }
 
     public void gotoHomePage() throws Exception
     {
-        WebElement element = driver.findElement(By.xpath("//i[@class='icon-home']"));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-        Thread.sleep(500);
-        dashboard_home.click();
+       // WebElement element = driver.findElement(By.xpath("//i[@class='icon-home']"));
+       // ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+       // Thread.sleep(500);
+       /// dashboard_home.click();
 
     }
     public boolean IsCurrentRole(String arg1) {
+
         return CurrentUserRole.getText().equals(arg1);
     }
 
     public void NavigateToMonitorInputData()
     {
+        menuoptions.click();
         MonitorInputData.click();
 
     }
 
-    public void navigateToBreadcrumbs(String strlink)
-    {
-        List<WebElement> links = driver.findElements(By.xpath("//div[@class='container']/ul[@class='breadcrumb']/li"));
-        for(WebElement link :links)
-        {
-            if(link.getText().trim().equals(strlink)) {
-                link.click();
-                try {
-                    driver.switchTo().alert().accept();
-                }
-                catch (Exception ex) { }
-                return;
-            }
-        }
-    }
 }

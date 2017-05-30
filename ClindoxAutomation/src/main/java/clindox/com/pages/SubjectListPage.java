@@ -14,14 +14,14 @@ import java.util.List;
 
 public class SubjectListPage extends BasePage{
 
-    @FindBy(xpath="//div[@class='list-block clearfix']")
+    @FindBy(xpath="//div[@id='ctl00_ContentPlaceHolder1_clindoxPannel']/div[@class='row study-cards']/div[1]/div[@class='col s6 m6']")
     public List<WebElement> SubjectList;
 
     public boolean SelectSubject(String Subject, String Visit)
     {
-        Subject = "ID: " + Subject;
-        WaitforElement(By.xpath("//div[@class='list-block clearfix']"));
-        List<WebElement> pages = driver.findElements(By.xpath("//div[@class='pagination pull-right']/ul[@id='uls']//a"));
+        Subject = "MID: " + Subject;
+        WaitforElement(By.xpath("//div[@id='ctl00_ContentPlaceHolder1_clindoxPannel']/div[@class='row study-cards']/div[1]/div[@class='col s6 m6']"));
+       /* List<WebElement> pages = driver.findElements(By.xpath("//div[@class='pagination pull-right']/ul[@id='uls']//a"));
         if(pages.size() > 0) {
             for (int pageno = 1; pageno <= pages.size(); pageno++) {
                 if (pageno != 1) {
@@ -42,7 +42,7 @@ public class SubjectListPage extends BasePage{
             }
         }
         else
-        {
+        {*/
             for (WebElement subjectrow : SubjectList) {
                 if (subjectrow.getText().contains(Subject)) {
                     WaitforElement(By.xpath(".//a[contains(text(), '" + Visit + "')]"));
@@ -51,7 +51,7 @@ public class SubjectListPage extends BasePage{
                     return true;
                 }
             }
-        }
+      //  }
         return false;
     }
 

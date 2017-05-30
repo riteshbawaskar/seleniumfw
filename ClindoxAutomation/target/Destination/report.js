@@ -2,7 +2,7 @@ $(document).ready(function() {var formatter = new CucumberHTML.DOMFormatter($('.
 formatter.feature({
   "line": 2,
   "name": "Update Answers",
-  "description": "",
+  "description": "\u0027Background:\r\n  \u0027Given login to application with default user",
   "id": "update-answers",
   "keyword": "Feature",
   "tags": [
@@ -13,26 +13,7 @@ formatter.feature({
   ]
 });
 formatter.before({
-  "duration": 515727156,
-  "status": "passed"
-});
-formatter.background({
-  "line": 3,
-  "name": "",
-  "description": "",
-  "type": "background",
-  "keyword": "Background"
-});
-formatter.step({
-  "line": 4,
-  "name": "login to application with default user",
-  "keyword": "Given "
-});
-formatter.match({
-  "location": "SelectRoleSteps.login_to_application_with_default_user()"
-});
-formatter.result({
-  "duration": 8253429174,
+  "duration": 466916759,
   "status": "passed"
 });
 formatter.scenario({
@@ -73,7 +54,7 @@ formatter.match({
   "location": "SelectRoleSteps.user_is_on_Dashboard_Page()"
 });
 formatter.result({
-  "duration": 4459819,
+  "duration": 4518120819,
   "status": "passed"
 });
 formatter.match({
@@ -84,27 +65,4 @@ formatter.match({
     }
   ],
   "location": "SelectRoleSteps.set_user_role_as(String)"
-});
-formatter.result({
-  "duration": 4614407196,
-  "status": "passed"
-});
-formatter.match({
-  "location": "UpdateAnswersSteps.user_Enters_data_from_Input_Sheet()"
-});
-formatter.result({
-  "duration": 113949450331,
-  "status": "passed"
-});
-formatter.match({
-  "location": "UpdateAnswersSteps.data_should_be_saved_successfully()"
-});
-formatter.result({
-  "duration": 85042,
-  "status": "passed"
-});
-formatter.after({
-  "duration": 2042742419,
-  "status": "passed"
-});
 });

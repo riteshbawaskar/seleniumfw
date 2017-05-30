@@ -136,7 +136,6 @@ public class UpdateAnswersSteps {
                     inputDataPage = PageFactory.initElements(driver, InputDataPage.class);
                     dashboardPage = PageFactory.initElements(driver, DashboardPage.class);
 
-                    dashboardPage.navigateToBreadcrumbs("Input Study's List");
                     Thread.sleep(1000);
                     Boolean tableContent = false;
                     String tableRow = "1";
@@ -288,7 +287,7 @@ public class UpdateAnswersSteps {
                     inputDataPage = PageFactory.initElements(driver, InputDataPage.class);
                     dashboardPage = PageFactory.initElements(driver, DashboardPage.class);
 
-                    dashboardPage.navigateToBreadcrumbs("Input Study's List");
+                    //dashboardPage.navigateToBreadcrumbs("Input Study's List");
                     Thread.sleep(1000);
                     Boolean tableContent = false;
                     String tableRow = "1";

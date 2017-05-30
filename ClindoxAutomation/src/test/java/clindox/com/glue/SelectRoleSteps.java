@@ -74,9 +74,9 @@ public class SelectRoleSteps {
     public void role_should_be_changed_successfully_as(String arg1) throws Throwable {
         // Write code here that turns the phrase above into concrete actions
        // throw new PendingException();
-        Assert.assertTrue(dashboardPage.IsCurrentRole(arg1));
-        ReportProvider.GenerateSnapshotReport(driver, dashboardPage.CurrentUserRole);
-        ReportProvider.getTest().log(LogStatus.PASS,"switch profile successfully to " + arg1);
+       Assert.assertTrue(dashboardPage.IsCurrentRole(arg1));
+       ReportProvider.GenerateSnapshotReport(driver, dashboardPage.CurrentUserRole);
+       ReportProvider.getTest().log(LogStatus.PASS,"switch profile successfully to " + arg1);
     }
 
 }

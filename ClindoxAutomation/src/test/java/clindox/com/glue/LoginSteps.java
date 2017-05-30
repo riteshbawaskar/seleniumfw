@@ -86,7 +86,9 @@ public class LoginSteps {
       //  throw new PendingException();
         Assert.assertTrue(loginPage.ValidateLogin(arg1));
 
-        ReportProvider.GenerateSnapshotReport(driver, loginPage.loginContainer);
+        if(arg1 != "successful")
+            ReportProvider.GenerateSnapshotReport(driver, loginPage.loginContainer);
+
         ReportProvider.getTest().log(LogStatus.PASS,"Login Passed." );
     }
 

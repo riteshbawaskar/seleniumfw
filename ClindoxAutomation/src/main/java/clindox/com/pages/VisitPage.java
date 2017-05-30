@@ -15,7 +15,7 @@ import java.util.List;
 
 public class VisitPage extends BasePage{
 
-    @FindBy(xpath="//div[@class='questions-list-title']")
+    @FindBy(xpath="//div[contains(@id,'ctl00_ContentPlaceHolder1_rptQuestion')]")
     public List<WebElement> QuestionList;
     public WebElement currentQuestion;
 
@@ -28,6 +28,17 @@ public class VisitPage extends BasePage{
     @FindBy(xpath="//a/img[@id='you tube']/@src")
     public WebElement returntosubject;
 
+    @FindBy(xpath="//div[@class='card-panel pDetails']/div[@class='row test-study-options']//div[@class='col s5 m5']/div[@class='input-field col s12 dropdown-holder']//input[@class='select-dropdown']")
+    public WebElement visitDropdown;
+
+    @FindBy(xpath="//div[@class='row test-study-options']//div[@class='col s5 m5']/div[@class='input-field col s12 dropdown-holder']//ul[contains(@id,'select-options')]/li")
+    public List<WebElement> visitList;
+
+    @FindBy(xpath="//div[@class='card-panel pDetails']/div[@class='row section-container']//div[@class='row setting-cards']//div[@class='select-wrapper initialized']//input[@class='select-dropdown']")
+    public WebElement sectionDropdown;
+
+    @FindBy(xpath="//div[@class='card-panel pDetails']/div[@class='row section-container']//div[@class='row setting-cards']//div[@class='select-wrapper initialized']//ul[contains(@id,'select-option')]//li")
+    public List<WebElement> sectionList;
 
     WebDriver driver;
 
@@ -63,46 +74,37 @@ public class VisitPage extends BasePage{
 
     public void SelectVisit(String visitName)
     {
-        //ul[@class='nav nav-tabs nav-stacked nav-visits']//span[@title='Visit 1 Checklist: Initial Baseline Assessment']
-        //ul[@class='nav nav-tabs nav-stacked nav-visits']//span[@title='Visit 1 Checklist: Initial Baseline Assessment']/../../ul/li[1]
-        String visitxpath = "//ul[@class='nav nav-tabs nav-stacked nav-visits']//span[@title='"+ visitName +"']";
-        String firstsection = "//ul[@class='nav nav-tabs nav-stacked nav-visits']//span[@title='"+ visitName +"']/../../ul/li[1]";
+        visitDropdown.click();
+        for(WebElement element : visitList) {
+            if(element.getText().contains(visitName))
+                element.click();
+        }
 
-        WebElement element =  driver.findElement(By.xpath(visitxpath));
-        element.click();
-        WebElement sectionelement =  driver.findElement(By.xpath(firstsection));
-        sectionelement.click();
     }
 
-    public void SelectVisit(String visitName, String SectionName)
-    {
-        //ul[@class='nav nav-tabs nav-stacked nav-visits']//span[@title='Visit 1 Checklist: Initial Baseline Assessment']
-        //ul[@class='nav nav-tabs nav-stacked nav-visits']//span[@title='Visit 1 Checklist: Initial Baseline Assessment']/../../ul/li[1]
-        String visitxpath = "//ul[@class='nav nav-tabs nav-stacked nav-visits']//span[@title='"+ visitName +"']";
-        String firstsection = "//ul[@class='nav nav-tabs nav-stacked nav-visits']//span[@title='"+ visitName +"']/../../ul/li";
+    public void SelectVisit(String visitName, String SectionName) {
 
-        WebElement element =  driver.findElement(By.xpath(visitxpath));
-        element.click();
-        List<WebElement> sectionelements =  driver.findElements(By.xpath(firstsection));
-        for(WebElement ele : sectionelements )
-        {
-            if(ele.getText().equals(SectionName))
-            {
-                ele.click();
-                break;
-            }
+        visitDropdown.click();
+        for (WebElement element : visitList) {
+            if (element.getText().contains(visitName))
+                element.click();
         }
+
+        sectionDropdown.click();
+        for(WebElement element : sectionList) {
+            if(element.getText().contains(SectionName))
+                element.click();
+        }
+
     }
 
     public void SelectSection(String section)
     {
-        String sectionxpath = "//div[@id='ctl00_ContentPlaceHolder1_divSectionTitle']/a";
-        String sectionselectxpath = "//div[@id='ctl00_ContentPlaceHolder1_divSectionTitle']/ul//a[contains(text(),'"+section+"')]";
-
-        WebElement element =  driver.findElement(By.xpath(sectionxpath));
-        element.click();
-        WebElement sectionelement =  driver.findElement(By.xpath(sectionselectxpath));
-        sectionelement.click();
+        sectionDropdown.click();
+        for(WebElement element : sectionList) {
+            if(element.getText().contains(section))
+                element.click();
+        }
     }
 
     public boolean IsSection(String section) throws Exception

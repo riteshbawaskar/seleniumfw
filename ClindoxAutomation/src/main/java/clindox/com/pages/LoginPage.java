@@ -22,20 +22,20 @@ public class LoginPage extends BasePage {
     @FindBy(id="password")
     public WebElement password;
 
-    @FindBy(id="btnsign")
+    @FindBy(id="btnSignIn")
     public WebElement signin;
 
     @FindBy(id="ErrorMsg")
     public WebElement validationresult;
 
-    @FindBy(xpath="//div[@id='ValidationSummary1']/ul/li")
+    @FindBy(id="ValidationSummary1")
     public List<WebElement> validationSummary;
 
-    @FindBy(xpath="//h1[contains(text(), 'Dashboard')]")
+    @FindBy(id="ctl00_lblPageTitle")
     public WebElement Dashboard;
 
     public WebDriver driver;
-    @FindBy(xpath="//div[@class='signin-container clearfix']/div[@class='content']")
+    @FindBy(xpath="//div[@id='login-page']/div[@class='z-depth-4 card']")
     public WebElement loginContainer;
 
     public LoginPage() {
@@ -49,7 +49,7 @@ public class LoginPage extends BasePage {
 
     public void EnterLoginDetails(String inputusername, String inputPassword )
     {
-        WaitforElement(By.id("btnsign"));
+        WaitforElement(By.id("btnSignIn"));
         System.out.println(inputusername);
         username.sendKeys(inputusername);
         password.sendKeys(inputPassword);

@@ -26,17 +26,15 @@ public class InputDataPage extends BasePage {
         {
             if(row.getText().contains(Study))
             {
-                WebElement actionbtn = row.findElement(By.xpath(".//a[contains(text(), 'Actions')]"));
+                WebElement actionbtn = row.findElement(By.xpath(".//img[contains(@src,'Setting_Icon')]"));
                 actionbtn.click();
                 //WaitforElement(By.xpath(".//a[contains(@id,'SelectRecord')]"));
                 Thread.sleep(1000);
-                WebElement subjects = row.findElement(By.xpath(".//a[contains(@id,'SelectRecord')]"));
+                WebElement subjects = row.findElement(By.xpath(".//a[contains(@id,'SelectRecord1')]"));
                 subjects.click();
                 return true;
             }
         }
         return false;
     }
-
-
 }
